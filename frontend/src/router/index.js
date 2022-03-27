@@ -31,27 +31,92 @@ const router = createRouter({
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('../views/ProfileView.vue'),
+      beforeEnter: async (to, from, next) => {
+        const token = window.localStorage.getItem('Auth-Token');
+        if (!token) {
+          next({name: 'login'})
+        } else {
+          try {
+            await api.verify(token);
+            next()
+          } catch (err) {
+            next({name: 'login'})
+          }
+        }
+      }
     },
     {
       path: '/document',
       name: 'document',
-      component: () => import('../views/DocumentView.vue')
+      component: () => import('../views/DocumentView.vue'),
+      beforeEnter: async (to, from, next) => {
+        const token = window.localStorage.getItem('Auth-Token');
+        if (!token) {
+          next({name: 'login'})
+        } else {
+          try {
+            await api.verify(token);
+            next()
+          } catch (err) {
+            next({name: 'login'})
+          }
+        }
+      }
     },
     {
       path: '/group',
       name: 'group',
-      component: () => import('../views/GroupView.vue')
+      component: () => import('../views/GroupView.vue'),
+      beforeEnter: async (to, from, next) => {
+        const token = window.localStorage.getItem('Auth-Token');
+        if (!token) {
+          next({name: 'login'})
+        } else {
+          try {
+            await api.verify(token);
+            next()
+          } catch (err) {
+            next({name: 'login'})
+          }
+        }
+      }
     },
     {
       path: '/progress',
       name: 'progress',
-      component: () => import('../views/ProgressView.vue')
+      component: () => import('../views/ProgressView.vue'),
+      beforeEnter: async (to, from, next) => {
+        const token = window.localStorage.getItem('Auth-Token');
+        if (!token) {
+          next({name: 'login'})
+        } else {
+          try {
+            await api.verify(token);
+            next()
+          } catch (err) {
+            next({name: 'login'})
+          }
+        }
+      }
     },
     {
       path: '/profile',
       name: 'profile',
-      component: () => import('../views/ProfileView.vue')
+      component: () => import('../views/ProfileView.vue'),
+      beforeEnter: async (to, from, next) => {
+        const token = window.localStorage.getItem('Auth-Token');
+        if (!token) {
+          next({name: 'login'})
+        } else {
+          try {
+            await api.verify(token);
+            next()
+          } catch (err) {
+            next({name: 'login'})
+          }
+        }
+      }
     }
   ]
 })

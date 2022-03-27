@@ -6,6 +6,7 @@ const mongoose = require('mongoose');
 //import routes
 const authRoute = require('./routes/auth');
 const profileRoute = require('./routes/profile');
+const documentRoute = require('./routes/document');
 
 dotenv.config();
 
@@ -20,7 +21,7 @@ app.use(express.json());
 //routes
 app.use('/api', authRoute);
 app.use('/api/profile', profileRoute);
-
+app.use('/api/document', documentRoute);
 
 //START SERVER
 app.listen(8000, () => console.log('Server is running'));

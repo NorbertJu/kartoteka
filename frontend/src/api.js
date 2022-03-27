@@ -36,6 +36,13 @@ const api = {
       },
       data: data
     });
+  },
+  getDocuments() {
+    return axios(url+'/document', {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      }
+    });
   }
 }
 

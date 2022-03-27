@@ -70,6 +70,7 @@ nav {
   height: calc(100vh - 62px - 20px);
   border-right: 2px rgb(212, 212, 212) solid;
   box-shadow: 1px 0px 5px rgb(230, 230, 230);
+  font-weight: 600;
 }
 
 nav a {
@@ -90,9 +91,9 @@ nav a {
 
 .main {
   float: left;
-  padding: 40px 50px 0 50px;
+  padding: 30px 50px 0 50px;
   width: calc(100% -  252px - 100px);
-  height: calc(100vh - 63px - 40px);
+  height: calc(100vh - 63px - 30px);
   overflow: auto;
 }
 

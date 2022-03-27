@@ -48,5 +48,4 @@ router.put('/', verify, async (req, res) => {
   }
 })
 
-
 module.exports = router;

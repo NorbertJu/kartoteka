@@ -1,0 +1,109 @@
+<template>
+  <div class="filter">
+    <div v-for="(value, name) in header" class="filterItem" :style="styleFilter(value.width)">
+      <input type="text" :placeholder="value.label" v-model="filter[name]" />
+    </div>
+  </div>
+  <table>
+    <tr>
+      <th v-for="value in header">
+        {{value.label}}
+      </th>
+    </tr>
+    <tr v-for="row in filterData">
+      <td v-for="(value, name) in header" :style="styleColumn(value.width)">
+        {{row[name]}}
+      </td>
+    </tr>
+  </table>
+</template>
+
+<script>
+export default {
+  name: 'Table',
+  props: {
+    data: Array,
+    header: Object,
+  },
+  data() {
+    return {
+      filter: {},
+    }
+  },
+  computed: {
+    filterData() {
+      console.log("here")
+      let result = this.data
+      for (name in this.filter) {
+        if (this.filter[name]) {
+          result = result.filter(obj => obj[name].toLowerCase().includes(this.filter[name].toLowerCase()))
+        }
+      }
+      return result
+    }
+  },
+  methods: {
+    styleFilter(value) {
+      let style = {
+        width: "calc("+ value + "% - 20px)"
+      }
+      return style
+    },
+    styleColumn(value) {
+      let style = {
+        width: value + "%"
+      }
+      return style
+    }
+  }
+}
+</script>
+
+<style scoped>
+.filter {
+  display: flex;
+}
+
+.filterItem {
+  padding: 0 10px;
+}
+
+input {
+    outline: none;
+    border: none;
+    border-bottom: 1px solid rgb(20, 165, 223);
+    margin-bottom: 10px;
+  }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th, td {
+  border: 1px solid rgb(212, 212, 212);
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+th {
+  color: rgb(20, 165, 223);
+}
+
+tr:hover {
+  background-color: #C4E4F2;
+  cursor: pointer;
+}
+
+th {
+  padding-top: 12px;
+  padding-bottom: 12px;
+  background-color: rgb(20, 165, 223);
+  color: white;
+  cursor: default;
+}
+
+</style>

@@ -12,7 +12,7 @@ const Document = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    min: 5,
+    min: 1,
     max: 255,
   },
   description: {

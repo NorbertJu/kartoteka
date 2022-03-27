@@ -65,6 +65,16 @@ const progressValidation = (data) => {
   return schema.validate(data);
 }
 
+const documentValidation = (data) => {
+  const schema = Joi.object({
+    data: Joi.string().required(),
+    author: Joi.string().required(),
+    name: Joi.string().min(1).max(255).required(),
+    description: Joi.string().max(500),
+  }); 
+  return schema.validate(data);
+}
+
 module.exports.registerValidation = registerValidation;
 module.exports.loginValidation = loginValidation;
 module.exports.profileValidation = profileValidation;
@@ -72,3 +82,4 @@ module.exports.groupValidation = groupValidation;
 module.exports.noteValidation = noteValidation;
 module.exports.assignmentValidation = assignmentValidation;
 module.exports.progressValidation = progressValidation;
+module.exports.documentValidation = documentValidation;

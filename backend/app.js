@@ -23,4 +23,4 @@ app.use('/api/profile', profileRoute);
 
 
 //START SERVER
-app.listen(3000, () => console.log('Server is running'));
+app.listen(8000, () => console.log('Server is running'));

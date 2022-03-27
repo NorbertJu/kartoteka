@@ -1,118 +1,110 @@
 <script setup>
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from '@/components/HelloWorld.vue'
 </script>
 
 <template>
-  <header>
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/profile">Profile</RouterLink>
-        <RouterLink to="/document">Document</RouterLink>
-        <RouterLink to="/progress">Progress</RouterLink>
-        <RouterLink to="/group">Group</RouterLink>
-      </nav>
-    </div>
-  </header>
-
+  <div class="layout" v-if="page !== 'login'">
+    <header>
+      <h1>Kartotéka</h1>
+      <div class="logout" v-on:click="logout">
+        Odhlásiť
+      </div>
+    </header>
+    <nav>
+      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/document">Dokumenty</RouterLink>
+      <RouterLink to="/progress">Progress</RouterLink>
+      <RouterLink to="/group">Skupiny</RouterLink>
+      <RouterLink to="/profile">Profil</RouterLink>
+    </nav>
+  </div>
   <RouterView />
 </template>
 
-<style>
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+<script>
+export default {
+  computed: {
+    page() {
+      return this.$route.name;
+    }
+  },
+  methods: {
+    logout() {
+      window.localStorage.clear();
+      this.$router.push({name: 'login'})
+    },
+  }
+}
+</script>
 
-  font-weight: normal;
+<style>
+body {
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
 header {
-  line-height: 1.5;
-  max-height: 100vh;
+  height: 60px;
+  width: 100%;
+  border-bottom: 2px rgb(212, 212, 212) solid;
+  box-shadow: 0px 1px 5px rgb(230, 230, 230);
+  align-items: center; 
+  
 }
 
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
+header h1 {
+  display: inline-block;
+  margin: 0;
+  padding: 10px 20px 10px 20px;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+h1 {
+  color: rgb(20, 165, 223)
 }
 
 nav {
-  width: 100%;
-  font-size: 12px;
-  text-align: center;
-  margin-top: 2rem;
-}
-
-nav a.router-link-exact-active {
-  color: var(--color-text);
-}
-
-nav a.router-link-exact-active:hover {
-  background-color: transparent;
+  padding-top: 20px;
+  float: left;
+  width: 250px;
+  height: calc(100vh - 62px - 20px);
+  border-right: 2px rgb(212, 212, 212) solid;
+  box-shadow: 1px 0px 5px rgb(230, 230, 230);
 }
 
 nav a {
   display: inline-block;
-  padding: 0 1rem;
-  border-left: 1px solid var(--color-border);
+  width: calc(100% - 40px);
+  padding: 10px 0 10px 40px;
+  margin: 10px 0 10px 0;
+  text-decoration: none;
+  color: rgb(160, 160, 160);
 }
 
-nav a:first-of-type {
-  border: 0;
+.router-link-active {
+  border-left: 5px solid rgb(20, 165, 223);
+  width: calc(100% - 45px);
+  padding-left: 35px;
+  color: rgb(20, 165, 223);
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
-
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  nav {
-    text-align: left;
-    margin-left: -1rem;
-    font-size: 1rem;
-
-    padding: 1rem 0;
-    margin-top: 1rem;
-  }
+.main {
+  float: left;
+  padding: 40px 50px 0 50px;
+  width: calc(100% -  252px - 100px);
+  height: calc(100vh - 63px - 40px);
+  overflow: auto;
 }
+
+.logout {
+  float: right;
+  margin: 22px;
+  color: rgb(20, 165, 223)
+}
+
+.logout:hover {
+  cursor: pointer;
+}
+
+
 </style>

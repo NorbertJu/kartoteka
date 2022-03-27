@@ -64,4 +64,14 @@ router.post('/login', async (req, res) => {
   res.header('Auth-Token', token).send(token);
 })
 
+router.post('/verify', async (req, res) => {
+  const token = req.body.token;
+  try {
+    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
+    res.send(verified.role)
+  } catch(err) {
+    res.status(400).send('Invalid token');
+  }
+})
+
 module.exports = router;

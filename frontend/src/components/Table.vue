@@ -10,7 +10,7 @@
         {{value.label}}
       </th>
     </tr>
-    <tr v-for="row in filterData">
+    <tr v-for="row in filterData" v-on:click="onClick(row._id)">
       <td v-for="(value, name) in header" :style="styleColumn(value.width)">
         {{row[name]}}
       </td>
@@ -24,6 +24,7 @@ export default {
   props: {
     data: Array,
     header: Object,
+    onClick: Function,
   },
   data() {
     return {
@@ -32,7 +33,6 @@ export default {
   },
   computed: {
     filterData() {
-      console.log("here")
       let result = this.data
       for (name in this.filter) {
         if (this.filter[name]) {
@@ -65,7 +65,8 @@ export default {
 }
 
 .filterItem {
-  padding: 0 10px;
+  margin: 0 10px;
+  overflow: hidden;
 }
 
 input {

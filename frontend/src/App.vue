@@ -11,7 +11,7 @@ import { RouterLink, RouterView } from 'vue-router'
       </div>
     </header>
     <nav>
-      <RouterLink to="/">Home</RouterLink>
+      <RouterLink to="/">Domov</RouterLink>
       <RouterLink to="/document">Dokumenty</RouterLink>
       <RouterLink to="/progress">Progress</RouterLink>
       <RouterLink to="/group">Skupiny</RouterLink>
@@ -91,9 +91,9 @@ nav a {
 
 .main {
   float: left;
-  padding: 30px 50px 0 50px;
+  padding: 30px 50px 30px 50px;
   width: calc(100% -  252px - 100px);
-  height: calc(100vh - 63px - 30px);
+  height: calc(100vh - 63px - 60px);
   overflow: auto;
 }
 

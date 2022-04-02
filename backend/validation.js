@@ -69,8 +69,9 @@ const documentValidation = (data) => {
   const schema = Joi.object({
     data: Joi.string().required(),
     author: Joi.string().required(),
+    creator: Joi.string().required(),
     name: Joi.string().min(1).max(255).required(),
-    description: Joi.string().max(500),
+    description: Joi.string().max(500).allow(''),
   }); 
   return schema.validate(data);
 }

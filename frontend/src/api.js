@@ -43,7 +43,47 @@ const api = {
         'Auth-Token': window.localStorage.getItem('Auth-Token')
       }
     });
-  }
+  },
+  getDocument(id) {
+    return axios(url+'/document/'+id, {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+    });
+  },
+  getDocumentEdit(id) {
+    return axios(url+'/document/edit/'+id, {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+    });
+  },
+  updateDocument(data) {
+    return axios(url+'/document', {
+      method: 'put',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
+  createDocument(data) {
+    return axios(url+'/document', {
+      method: 'post',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
+  deleteDocument(id) {
+    return axios(url+'/document/'+id, {
+      method: 'delete',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      }
+    });
+  },
 }
 
 export default api

@@ -22,7 +22,7 @@
 import ErrorMsg from '../components/ErrorMsg.vue'
 
 export default {
-  name: 'Login',
+  name: 'Profile',
   components: {
     ErrorMsg
   },
@@ -66,7 +66,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 .inputs {
     margin-bottom: 10px;
     color: rgb(20, 165, 223)

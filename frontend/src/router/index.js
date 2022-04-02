@@ -62,7 +62,14 @@ const router = createRouter({
             next({name: 'login'})
           }
         }
-      }
+      },
+      children: [
+        {
+          path: ':id',
+          name: 'documentId',
+          component: () => import('../views/DocumentView.vue')
+        },
+      ]
     },
     {
       path: '/group',

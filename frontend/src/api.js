@@ -84,6 +84,31 @@ const api = {
       }
     });
   },
+  getProgress(id) {
+    return axios(url+'/progress/'+id, {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      }
+    });
+  },
+  updateProgress(data) {
+    return axios(url+'/progress', {
+      method: 'put',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
+  createProgress(data) {
+    return axios(url+'/progress', {
+      method: 'post',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
 }
 
 export default api

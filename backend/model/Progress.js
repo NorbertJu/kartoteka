@@ -9,7 +9,6 @@ const Progress = new mongoose.Schema({
   },
   date: {
     type: Date,
-    required: true,
   },
   user_id: {
     type: String,

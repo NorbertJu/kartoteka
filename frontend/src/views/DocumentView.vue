@@ -13,9 +13,13 @@
         :author="author" 
         :data="data" 
         :description="description" 
+        :progress="progress"
+        :setProgress="setProgress"
         :edit="edit" 
         :canEdit="canEdit"
         :onEdit="onEdit"
+        :onProgressClick="onProgressClick" 
+        :onProgressUpdate="onProgressUpdate"
         :onUpdate="onDocumentUpdate" 
         :onCancel="onEditorCancel" 
         :onDelete="onDocumentDelete"
@@ -55,6 +59,8 @@ export default {
       author: '',
       data: '',
       description: '',
+      progress: 0,
+      setProgress: false,
       edit: false,
       canEdit: false
     }
@@ -86,6 +92,27 @@ export default {
         console.log(err)
       }
     },
+    async getProgress() {
+      try {
+        if (this.id != 'new') {
+          const response = await this.$api.getProgress(this.id);
+          if (!response.data) {
+            await this.$api.createProgress({document_id: this.id, state: 0});
+          } else {
+            this.progress = response.data?.state
+          }
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async updateProgress() {
+      try {
+        await this.$api.updateProgress({document_id: this.id, state: this.progress});
+      } catch (err) {
+        console.log(err)
+      }
+    },
     async getDocumentEdit() {
       try {
         if (this.id == 'new') {
@@ -110,8 +137,8 @@ export default {
           await this.$api.updateDocument({...data, id: this.id})
         }
         this.edit = false
-        await this.getDocuments()
-        await this.getDocument()
+        this.getDocuments()
+        this.getDocument()
       } catch (err) {
         console.log(err)
       }
@@ -134,6 +161,16 @@ export default {
     onEdit() {
       this.edit = true;
     },
+    onProgressClick() {
+      this.setProgress = !this.setProgress
+    },
+    onProgressUpdate(progress) {
+      if (this.setProgress) {
+        this.progress = progress
+        this.updateProgress()
+        this.setProgress = false
+      }
+    },
     newDocument() {
       this.edit = true;
       this.$router.push({name: 'documentId', params: { id: 'new' }})
@@ -143,8 +180,9 @@ export default {
     id: {
       handler: async function(id) {
         if (id) {
-          await this.getDocument();
-          await this.getDocumentEdit();
+          this.getDocument();
+          this.getProgress();
+          this.getDocumentEdit();
         } else {
           this.name = ''
           this.author = ''

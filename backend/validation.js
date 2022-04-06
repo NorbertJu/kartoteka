@@ -58,7 +58,7 @@ const assignmentValidation = (data) => {
 const progressValidation = (data) => {
   const schema = Joi.object({
     state: Joi.number().min(0).max(100).required(),
-    date: Joi.date().required(),
+    date: Joi.date(),
     user_id: Joi.string().required(),
     document_id: Joi.string().required(),
   }); 

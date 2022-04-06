@@ -109,6 +109,13 @@ const api = {
       data: data
     });
   },
+  getDocumentsProgress() {
+    return axios(url+'/document/progress', {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      }
+    });
+  },
 }
 
 export default api

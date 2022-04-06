@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const Document = require('../model/Document');
+const Progress = require('../model/Progress');
 const verify = require('./verify');
 const {documentValidation} = require('../validation')
 
@@ -13,7 +14,6 @@ router.get('/', verify, async (req, res) => {
 })
 
 router.post('/', verify, async (req, res) => {
-  //Validate data
   req.body.creator = req.user._id;
   const {error} = documentValidation(req.body);
   if (error) {
@@ -57,6 +57,16 @@ router.delete('/:id', verify, async (req, res) => {
     const document = await Document.deleteOne({_id: req.params.id});
     res.json(document)
   } catch (err) {
+    res.status(400).send(err)
+  }
+})
+
+router.get('/progress', verify, async (req, res) => {
+  try {
+    let progresses = await Progress.find({user_id: req.user._id}).where('state').gt(0).sort('-state').populate('document_id');
+    res.json(progresses)
+  } catch (err) {
+    console.log(err)
     res.status(400).send(err)
   }
 })

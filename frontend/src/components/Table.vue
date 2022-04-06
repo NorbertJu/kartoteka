@@ -1,7 +1,7 @@
 <template>
   <div class="filter">
     <div v-for="(value, name) in header" class="filterItem" :style="styleFilter(value.width)">
-      <input type="text" :placeholder="value.label" v-model="filter[name]" />
+      <input v-if="!value?.noFilter" type="text" :placeholder="value.label" v-model="filter[name]" />
     </div>
   </div>
   <table>
@@ -11,7 +11,7 @@
       </th>
     </tr>
     <tr v-for="row in filterData" v-on:click="onClick(row._id)">
-      <td v-for="(value, name) in header" :style="styleColumn(value.width)">
+      <td v-for="(value, name) in header" :style="styleColumn(value.width, value.align)">
         {{row[name]}}
       </td>
     </tr>
@@ -49,9 +49,10 @@ export default {
       }
       return style
     },
-    styleColumn(value) {
+    styleColumn(width, align) {
       let style = {
-        width: value + "%"
+        'width': width + "%",
+        'text-align': align,
       }
       return style
     }

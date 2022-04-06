@@ -188,6 +188,7 @@ export default {
           this.author = ''
           this.data = ''
           this.description = ''
+          this.progress = 0
         }
       },
       immediate: true

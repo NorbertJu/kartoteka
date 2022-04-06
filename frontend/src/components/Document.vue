@@ -71,10 +71,12 @@ export default {
   methods: {
     onContentClick(event) {
       if (this.setProgress) {
-        const isFinished = (this.$refs.content.offsetHeight - this.$refs.newProgressLine.style.top.replace('px', '')) < 15 ? true : false
         let newProgress
-        if (isFinished) {
+        if (this.$refs.content.offsetHeight - this.$refs.newProgressLine.style.top.replace('px', '') < 20) {
           newProgress = 100
+        }
+        else if (this.$refs.newProgressLine.style.top.replace('px', '') < 20) {
+          newProgress = 0
         } else {
           newProgress = Math.round(this.$refs.newProgressLine.style.top.replace('px', '') / this.$refs.content.offsetHeight * 100)
         }

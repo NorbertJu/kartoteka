@@ -1,4 +1,4 @@
-# Report 1 (21.3. - 27.3.)
+# Report 2 (21.3. - 27.3.)
 
 **Meno a priezvisko:** Norbert Jurík
 

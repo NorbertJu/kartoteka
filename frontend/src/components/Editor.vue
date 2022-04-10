@@ -105,6 +105,14 @@ export default {
     margin-bottom: 10px;
   }
 
+  textarea {
+    outline: none;
+    border: 1px solid rgb(20, 165, 223);
+    border-radius: 20px;
+    padding: 10px;
+    background-color: white;
+  }
+
   .inputGroup {
     display: flex;
   }

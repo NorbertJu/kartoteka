@@ -1,5 +1,5 @@
 <template>
-  <div class="document" v-if="!edit">
+  <div class="document" v-if="!edit" v-bind:class="{ 'opened': noteOpen }">
     <div class="flex">
       <h1>{{name}}</h1>
       <button v-if="canEdit && !edit" class="editButton" v-on:click="onEdit">Upraviť</button>
@@ -17,6 +17,7 @@
       <div ref="progressLine" class="progressLine" v-bind:style="{'top': this.progressLine}"></div>
       <div ref="newProgressLine" class="newProgressLine" ></div>
     </div>
+    <Note :note="note" :open="noteOpen" :onClick="onNote" />
     <ProgressBar 
       :progress="progress" 
       :onClick="onProgressClick"
@@ -36,12 +37,14 @@
 <script>
 import Editor from './Editor.vue'
 import ProgressBar from './ProgressBar.vue'
+import Note from './Note.vue'
 
 export default {
   name: 'Document',
   components: {
     Editor,
-    ProgressBar
+    ProgressBar,
+    Note
   },
   props: {
     data: String,
@@ -52,6 +55,9 @@ export default {
     setProgress: Boolean,
     edit: Boolean,
     canEdit: Boolean,
+    note: String,
+    noteOpen: Boolean,
+    onNote: Function,
     onEdit: Function,
     onProgressClick: Function,
     onProgressUpdate: Function,
@@ -62,7 +68,7 @@ export default {
   data() {
     return {
       isLoaded: false,
-      resize: 0
+      resize: 0,
     }
   },
   mounted() {
@@ -171,5 +177,9 @@ export default {
     position: absolute;
     border-top: 1px solid rgb(20, 165, 223);
     width: 100%;
+  }
+
+  .opened {
+    padding-bottom: 140px;
   }
 </style>

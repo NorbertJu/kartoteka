@@ -17,6 +17,9 @@
         :setProgress="setProgress"
         :edit="edit" 
         :canEdit="canEdit"
+        :note="note"
+        :noteOpen="noteOpen"
+        :onNote="onNote"
         :onEdit="onEdit"
         :onProgressClick="onProgressClick" 
         :onProgressUpdate="onProgressUpdate"
@@ -62,7 +65,9 @@ export default {
       progress: 0,
       setProgress: false,
       edit: false,
-      canEdit: false
+      canEdit: false,
+      note: '',
+      noteOpen: false,
     }
   },
   computed: {
@@ -109,6 +114,27 @@ export default {
     async updateProgress() {
       try {
         await this.$api.updateProgress({document_id: this.id, state: this.progress});
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getNote() {
+      try {
+        if (this.id != 'new') {
+          const response = await this.$api.getNote(this.id);
+          if (!response.data) {
+            await this.$api.createNote({document_id: this.id, text: ''});
+          } else {
+            this.note = response.data?.text
+          }
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async updateNote() {
+      try {
+        await this.$api.updateNote({document_id: this.id, text: this.note});
       } catch (err) {
         console.log(err)
       }
@@ -161,6 +187,13 @@ export default {
     onEdit() {
       this.edit = true;
     },
+    onNote(note) {
+      if (this.noteOpen) {
+        this.note = note
+        this.updateNote()
+      }
+      this.noteOpen = !this.noteOpen;
+    },
     onProgressClick() {
       this.setProgress = !this.setProgress
     },
@@ -182,6 +215,7 @@ export default {
         if (id) {
           this.getDocument();
           this.getProgress();
+          this.getNote();
           this.getDocumentEdit();
         } else {
           this.name = ''
@@ -189,6 +223,8 @@ export default {
           this.data = ''
           this.description = ''
           this.progress = 0
+          this.note = ''
+          this.noteOpen = false
         }
       },
       immediate: true

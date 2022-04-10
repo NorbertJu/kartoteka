@@ -37,7 +37,7 @@ const groupValidation = (data) => {
 
 const noteValidation = (data) => {
   const schema = Joi.object({
-    text: Joi.string().min(1).max(255).required(),
+    text: Joi.string().max(255).allow(''),
     user_id: Joi.string().required(),
     document_id: Joi.string().required(),
   });

@@ -116,6 +116,31 @@ const api = {
       }
     });
   },
+  getNote(id) {
+    return axios(url+'/note/'+id, {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      }
+    });
+  },
+  updateNote(data) {
+    return axios(url+'/note', {
+      method: 'put',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
+  createNote(data) {
+    return axios(url+'/note', {
+      method: 'post',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
 }
 
 export default api

@@ -10,7 +10,7 @@
       <input type="text" id="author" name="author" v-model="author">
       </div>
       <label for="description">Popis: </label>
-      <textarea rows="4" id="description" name="description" v-model="description" />
+      <textarea rows="4" maxlength="500" id="description" name="description" v-model="description" />
     </div>
     <QuillEditor ref="quill" theme="snow" :toolbar="toolbar" />
     <div class="buttons">

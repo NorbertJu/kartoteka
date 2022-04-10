@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const url = 'http://localhost:8000/api';
+//const url = 'https://kartoteka-backend.herokuapp.com/api'
 
 const api = {
   login(email, password) {

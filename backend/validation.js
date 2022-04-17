@@ -28,7 +28,7 @@ const profileValidation = (data) => {
 
 const groupValidation = (data) => {
   const schema = Joi.object({
-    name: Joi.string().min(5).max(255).required(),
+    name: Joi.string().min(3).max(255).required(),
     manager_id: Joi.string().required(),
     members: Joi.array(),
   });

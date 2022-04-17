@@ -12,7 +12,7 @@
     </tr>
     <tr v-for="row in filterData" v-on:click="onClick(row._id)">
       <td v-for="(value, name) in header" :style="styleColumn(value.width, value.align)">
-        {{row[name]}}
+        {{value.type == "check" ? (row[name] ? "Áno" : "Nie") : row[name]}}
       </td>
     </tr>
   </table>

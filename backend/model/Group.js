@@ -4,16 +4,20 @@ const Group = new mongoose.Schema({
   name: {
     type: String,
     required: true,
-    min: 5,
+    min: 3,
     max: 255,
   },
   manager_id: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
     required: true,
   },
-  members: {
-    type: Array,
-  },
+  members: [
+    {
+      member: {type: mongoose.Schema.Types.ObjectId, ref: "User"},
+      active: {type: Boolean, default: false},
+    }
+  ],
 });
 
 module.exports = mongoose.model('Group', Group)

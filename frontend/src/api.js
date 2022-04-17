@@ -38,6 +38,13 @@ const api = {
       data: data
     });
   },
+  getUsers() {
+    return axios(url+'/profile/all', {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      }
+    });
+  },
   getDocuments() {
     return axios(url+'/document', {
       headers: {
@@ -140,6 +147,53 @@ const api = {
         'Auth-Token': window.localStorage.getItem('Auth-Token')
       },
       data: data
+    });
+  },
+  getGroups() {
+    return axios(url+'/group', {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      }
+    });
+  },
+  getGroup(id) {
+    return axios(url+'/group/'+id, {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+    });
+  },
+  getGroupEdit(id) {
+    return axios(url+'/group/edit/'+id, {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+    });
+  },
+  updateGroup(data) {
+    return axios(url+'/group', {
+      method: 'put',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
+  createGroup(data) {
+    return axios(url+'/group', {
+      method: 'post',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
+  deleteGroup(id) {
+    return axios(url+'/group/'+id, {
+      method: 'delete',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      }
     });
   },
 }

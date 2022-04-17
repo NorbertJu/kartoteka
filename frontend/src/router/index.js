@@ -87,7 +87,14 @@ const router = createRouter({
             next({name: 'login'})
           }
         }
-      }
+      },
+      children: [
+        {
+          path: ':id',
+          name: 'groupId',
+          component: () => import('../views/GroupView.vue')
+        },
+      ]
     },
     {
       path: '/progress',

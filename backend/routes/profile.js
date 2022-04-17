@@ -21,6 +21,15 @@ router.get('/', verify, async (req, res) => {
   }
 })
 
+router.get('/all', verify, async (req, res) => {
+  try {
+    const users = await User.find({}, {name: 1, email: 1}).where('_id').ne(req.user._id);
+    res.json(users)
+  } catch (err) {
+    res.status(400).send(err)
+  }
+})
+
 router.put('/', verify, async (req, res) => {
   //Validate data
   const {error} = profileValidation(req.body);

@@ -10,6 +10,7 @@ const documentRoute = require('./routes/document');
 const progressRoute = require('./routes/progress');
 const noteRoute = require('./routes/note');
 const groupRoute = require('./routes/group');
+const assignmentRoute = require('./routes/assignment');
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ app.use('/api/document', documentRoute);
 app.use('/api/progress', progressRoute);
 app.use('/api/note', noteRoute);
 app.use('/api/group', groupRoute);
+app.use('/api/assignment', assignmentRoute);
 
 //START SERVER
 app.listen(process.env.PORT || 8000, () => console.log('Server is running'));

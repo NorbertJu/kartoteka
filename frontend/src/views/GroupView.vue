@@ -12,6 +12,7 @@
         :name="name" 
         :manager="manager" 
         :members="members"
+        :isMember="isMember"
         :users="users" 
         :edit="edit"
         :canEdit="canEdit"
@@ -20,6 +21,14 @@
         :onCancel="onEditCancel" 
         :onDelete="onGroupDelete"
         :onMemberClick="onMemberClick"
+        :onAccept="onAccept"
+        :onReject="onReject"
+        :assignments="assignments"
+        :assign="assign"
+        :onAssign="onAssign"
+        :onAssignUpdate="onAssignUpdate"
+        :onAssignCancel="onAssignCancel"
+        :documents="documents"
       />
     </template>
   </div>
@@ -39,12 +48,10 @@ export default {
     return {
       groups: [],
       header: {
-        active: {
-          label: "Člen",
+        status: {
+          label: "Status",
           width: 10,
           align: "center",
-          noFilter: true,
-          type: "check"
         },
         name: {
           label: "Názov",
@@ -57,10 +64,14 @@ export default {
       },
       name: '',
       manager: '',
+      isMember: false,
       members: [],
       users: [],
       edit: false,
       canEdit: false,
+      assignments: [],
+      assign: false,
+      documents: [],
     }
   },
   computed: {
@@ -75,7 +86,7 @@ export default {
         const data = response.data.map(res => ({
           name: res.name,
           manager: `${res.manager_id?.name} (${res.manager_id?.email})`,
-          members: res.members,
+          status: window.localStorage.getItem('user') == res.manager_id.name ? 'Manažér' : res.members.filter(member => member.member.name == window.localStorage.getItem('user'))[0]?.active ? "Člen" : "",
           _id: res._id
         }))
         this.groups = data
@@ -95,8 +106,9 @@ export default {
             active: m.active,
             _id: m.member._id
           }))
+          this.isMember = this.members.filter(member => member.name == window.localStorage.getItem('user'))[0]?.active
         }
-        await this.getUsers();
+        await this.getAssignment(); 
       } catch (err) {
         console.log(err)
       }
@@ -135,6 +147,43 @@ export default {
         console.log(err)
       }
     },
+    async getDocuments() {
+      try {
+        const response = await this.$api.getDocuments();
+        let documents = []
+        for (let document of response.data) {
+          let found = false
+          for (let assignment of this.assignments) {
+            if (assignment.document_id == document._id) {
+              documents.push({...document, added: true, date_from: assignment.date_from, date_to: assignment.date_to})
+              found = true
+              break;
+            }
+          }
+          if (!found) {
+            documents.push({...document, added: false})
+          }
+        }
+        this.documents = documents
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async getAssignment() {
+      try {
+        const response = await this.$api.getAssignment(this.id);
+        this.assignments = response.data.map(assignment => ({
+          ...assignment,
+          date_from: new Date(assignment.date_from).toISOString().slice(0, 10),
+          date_to: new Date(assignment.date_to).toISOString().slice(0, 10),
+          name: assignment.document_id.name,
+          author: assignment.document_id.author,
+          document_id: assignment.document_id._id,
+        }))
+      } catch (err) {
+        console.log(err)
+      }
+    },
     async onGroupUpdate(data) {
       try {
         if (this.id == 'new') {
@@ -150,10 +199,18 @@ export default {
         console.log(err)
       }
     },
+    async onAssignUpdate(data) {
+      try {
+        await this.$api.updateAssignments({documents: data, group_id: this.id})
+        this.assign = false
+        this.getGroup()
+      } catch (err) {
+        console.log(err)
+      }
+    },
     async onMemberClick(id) {
       try {
         await this.$api.updateMember({id: this.id})
-        
       } catch (err) {
         console.log(err)
       }
@@ -164,6 +221,9 @@ export default {
         this.$router.push({name: 'group'})
       }
     },
+    onAssignCancel() {
+      this.assign = false
+    },
     async onGroupDelete() {
       try {
         await this.$api.deleteGroup(this.id)
@@ -173,8 +233,13 @@ export default {
         console.log(err)
       }
     },
-    onEdit() {
+    async onEdit() {
       this.edit = true;
+      await this.getUsers();
+    },
+    async onAssign() {
+      this.assign = true;
+      await this.getDocuments();
     },
     newGroup() {
       this.edit = true;
@@ -182,6 +247,37 @@ export default {
     },
     openGroup(id) {
       this.$router.push({name: 'groupId', params: { id: id }})
+    },
+    async onAccept() {
+      try {
+        const updatedMembers = this.members.map(member => {
+          if (member.name == window.localStorage.getItem('user')) {
+            member.active = true
+          }
+          return {
+            member: member._id,
+            active: member.active
+          }
+        })
+        await this.$api.updateGroup({members: updatedMembers, id: this.id})
+        this.getGroups()
+        this.getGroup()
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async onReject() {
+      try {
+        const updatedMembers = this.members.filter(member => member.name != window.localStorage.getItem('user')).map(member => ({
+          member: member._id,
+          active: member.active
+        }))
+        await this.$api.updateGroup({members: updatedMembers, id: this.id})
+        this.getGroups()
+        this.$router.push({name: 'group'})
+      } catch (err) {
+        console.log(err)
+      }
     },
   },
   watch: {

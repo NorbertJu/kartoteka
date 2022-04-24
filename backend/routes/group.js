@@ -8,9 +8,9 @@ router.get('/', verify, async (req, res) => {
     const groups = await Group.find({
       $or: [
         {manager_id: req.user._id}, 
-        {'members.id': req.user._id}
+        {'members.member': req.user._id}
       ]
-    }).populate('manager_id'); 
+    }).populate('manager_id').populate('members.member'); 
     res.json(groups)
   } catch (err) {
     res.status(400).send(err)
@@ -31,6 +31,11 @@ router.post('/', verify, async (req, res) => {
   const {error} = groupValidation(req.body);
   if (error) {
     return res.status(400).send(error.details[0].message)
+  }
+
+  const nameExist = await Group.findOne({name: req.body.name})
+  if (nameExist) {
+    return res.status(400).send("Name already exists")
   }
   
   const group = new Group({

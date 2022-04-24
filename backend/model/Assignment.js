@@ -1,16 +1,14 @@
 const mongoose = require('mongoose');
 
 const Assignment = new mongoose.Schema({
-  manager_id: {
-    type: String,
-    required: true,
-  },
-  user_id: {
-    type: String,
+  group_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Group",
     required: true,
   },
   document_id: {
-    type: String,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Document",
     required: true,
   },
   date_to: {

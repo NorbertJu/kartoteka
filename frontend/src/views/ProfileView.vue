@@ -54,6 +54,7 @@ export default {
           newData.password = this.password
         }
         const res = await this.$api.updateProfile(newData);
+        window.localStorage.setItem('user', this.name)
         this.$router.push({name: 'home'})
       } catch (err) {
         this.error = err.response.data;

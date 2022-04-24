@@ -1,15 +1,23 @@
 <template>
   <div class="group">
-    <template v-if="!edit" >
+    <template v-if="!edit && !assign" >
       <div class="flex">
         <h1>{{name}}</h1>
-        <button v-if="canEdit" class="editButton" v-on:click="onEdit">Upraviť</button>
-        <button v-if="!canEdit" class="editButton" v-on:click="onAccept">Potvrdiť</button>
+        <div v-if="canEdit">
+          <button class="editButton" v-on:click="onEdit">Upraviť</button>
+          <button class="editButton ml" v-on:click="onAssign">Priradiť dokument</button>
+        </div>
+        <div v-if="!canEdit">
+          <button v-if="!isMember" class="editButton" v-on:click="onAccept">Potvrdiť</button>
+          <button class="deleteButton" v-on:click="onReject">{{isMember ? 'Opustiť' : 'Zamietnuť'}}</button>
+        </div>
       </div>
       <h2>{{manager}}</h2>
       <Table :header="membersHeader" :data="members" :onClick="() => {}" />
+      <br>
+      <Table :header="assignmentsHeader" :data="assignments" :onClick="() => {}" />
     </template>
-    <template v-else>
+    <template v-if="edit">
       <div class="inputs">
         <div class="inputGroup">
           <label for="name">Názov: </label>
@@ -18,9 +26,17 @@
       </div>
       <Table :header="usersHeader" :data="filteredUsers" :onClick="onUserClick" />
       <div class="buttons">
-        <button class="updateButton" v-on:click="onUpdate(getData())">{{id == 'new' ? 'Vytvoriť' : 'Aktualizovať'}}</button>
+        <button class="updateButton" v-on:click="onUpdate(getMembers())">{{id == 'new' ? 'Vytvoriť' : 'Aktualizovať'}}</button>
         <button class="cancelButton" v-on:click="onCancel">Zrušiť</button>
         <button v-if="id != 'new'" class="deleteButton" v-on:click="onDelete">Odstrániť</button>
+      </div>
+    </template>
+    <template v-if="assign">
+      <h2>Dokumenty</h2>
+      <Table :header="documentsHeader" :data="filteredDocuments" :onClick="onDocumentClick" />
+      <div class="buttons">
+        <button class="updateButton" v-on:click="onAssignUpdate(getAssignments())">Aktualizovať</button>
+        <button class="cancelButton" v-on:click="onAssignCancel">Zrušiť</button>
       </div>
     </template>
   </div>
@@ -38,6 +54,7 @@ export default {
     name: String,
     manager: String,
     members: Array,
+    isMember: Boolean,
     users: Array,
     edit: Boolean,
     canEdit: Boolean,
@@ -46,6 +63,13 @@ export default {
     onCancel: Function,
     onDelete: Function,
     onAccept: Function,
+    onReject: Function,
+    assignments: Array,
+    assign: Boolean,
+    onAssign: Function,
+    onAssignUpdate: Function,
+    onAssignCancel: Function,
+    documents: Array,
   },
   data() {
     return {
@@ -83,7 +107,48 @@ export default {
           width: 45,
         },
       },
-      addedUsers: []
+      documentsHeader: {
+        added: {
+          label: "Priradený",
+          width: 10,
+          align: "center",
+          noFilter: true,
+          type: "check"
+        },
+        name: {
+          label: "Názov",
+          width: 35,
+        },
+        author: {
+          label: "Autor",
+          width: 35,
+        },
+        date_to: {
+          label: "Dátom do",
+          width: 20,
+          type: "date",
+        }
+      },
+      assignmentsHeader: {
+        name: {
+          label: "Názov",
+          width: 25,
+        },
+        author: {
+          label: "Autor",
+          width: 25,
+        },
+        date_from: {
+          label: "Dátum od",
+          width: 25,
+        },
+        date_to: {
+          label: "Dátum do",
+          width: 25,
+        },
+      },
+      addedUsers: [],
+      addedDocuments: []
     }
   },
   computed: {
@@ -105,9 +170,25 @@ export default {
       })
       return users
     },
+    filteredDocuments() {
+      let documents = this.documents.map(document => {
+        if (this.addedDocuments.includes(document._id)) {
+          return {
+            _id: document._id,
+            name: document.name,
+            author: document.author,
+            date_from: document.date_from,
+            date_to: document.date_to,
+            added: !document.added
+          } 
+        }
+        return document
+      })
+      return documents
+    },
   },
   methods: {
-    getData() {
+    getMembers() {
       const newMembers = this.filteredUsers.filter(user => user.added).map(user => ({
         member: user._id,
         active: user.active || false
@@ -118,11 +199,33 @@ export default {
         members: newMembers
       }
     },
+    getAssignments() {
+      const today = new Date()
+      let week = new Date()
+      week.setDate(week.getDate() + 7)
+      const newAssignments = this.filteredDocuments.filter(document => document.added).map(document => ({
+        document_id: document._id,
+        date_from: document.date_from ? new Date(document.date_from) : today,
+        date_to: document.date_to ? new Date(document.date_to) : week
+      }))
+      this.addedDocuments = []
+      return newAssignments
+    },
     onUserClick(id) {
       if (this.addedUsers.includes(id)) {
         this.addedUsers = this.addedUsers.filter(user => user != id)
       } else {
         this.addedUsers.push(id)
+      }
+    },
+    onDocumentClick(id, e) {
+      if (e.target.tagName == "INPUT") {
+        return
+      }
+      if (this.addedDocuments.includes(id)) {
+        this.addedDocuments = this.addedDocuments.filter(document => document != id)
+      } else {
+        this.addedDocuments.push(id)
       }
     }
   }
@@ -130,6 +233,10 @@ export default {
 </script>
 
 <style scoped>
+  .ml {
+    margin-left: 10px;
+  }
+
   h2 {
     margin-top: 0;
   }
@@ -193,7 +300,7 @@ export default {
     padding: 10px;
     background-color: white;
     color: rgb(160, 160, 160);
-    margin: 10px;
+    margin: 10px 0 10px 10px;
   }
 
   .cancelButton:hover{
@@ -210,7 +317,7 @@ export default {
     padding: 10px;
     background-color: white;
     color: rgb(210, 50, 50);
-    margin: 10px 0;
+    margin: 10px 0 10px 10px;
   }
 
   .deleteButton:hover{

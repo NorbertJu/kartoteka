@@ -45,7 +45,8 @@ export default {
     async login() {
       try {
         const res = await this.$api.login(this.email, this.password);
-        window.localStorage.setItem('Auth-Token', res.data)
+        window.localStorage.setItem('Auth-Token', res.data.token)
+        window.localStorage.setItem('user', res.data.name)
         this.$router.push({name: 'home'})
       } catch (err) {
         this.error = err.response.data;
@@ -59,7 +60,8 @@ export default {
       try {
         await this.$api.register(this.email, this.password, this.name);
         const res = await this.$api.login(this.email, this.password);
-        window.localStorage.setItem('Auth-Token', res.data)
+        window.localStorage.setItem('Auth-Token', res.data.token)
+        window.localStorage.setItem('user', res.data.name)
         this.$router.push({name: 'home'})
       } catch (err) {
         this.error = err.response.data;

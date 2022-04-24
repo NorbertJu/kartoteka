@@ -196,6 +196,22 @@ const api = {
       }
     });
   },
+  getAssignment(id) {
+    return axios(url+'/assignment/'+id, {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+    });
+  },
+  updateAssignments(data) {
+    return axios(url+'/assignment', {
+      method: 'post',
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+      data: data
+    });
+  },
 }
 
 export default api

@@ -6,16 +6,15 @@ const {profileValidation} = require('../validation');
 
 router.get('/', verify, async (req, res) => {
   try {
-    const profile = await User.findOne({user_id: req.user._id});
+    const profile = await User.findOne({_id: req.user._id});
     if (!profile) {
       res.status(404).send("Profile does not exist")
-    } else {
-      let result = {
-        name: profile.name,
-        email: profile.email
-      }
-      res.json(result)
     }
+    let result = {
+      name: profile.name,
+      email: profile.email
+    }
+    res.json(result)
   } catch (err) {
     res.status(400).send(err)
   }

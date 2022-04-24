@@ -10,9 +10,17 @@
         {{value.label}}
       </th>
     </tr>
-    <tr v-for="row in filterData" v-on:click="onClick(row._id)">
+    <tr v-for="row in filterData" v-on:click="onClick(row._id, $event)">
       <td v-for="(value, name) in header" :style="styleColumn(value.width, value.align)">
-        {{value.type == "check" ? (row[name] ? "Áno" : "Nie") : row[name]}}
+        <template v-if="value.type == 'check'">
+          {{(row[name] ? "Áno" : "Nie")}}
+        </template>
+        <template v-if="value.type == 'date'">
+          <input type="date" v-model="row[name]">
+        </template>
+        <template v-if="!value.type">
+          {{row[name]}}
+        </template>
       </td>
     </tr>
   </table>
@@ -70,7 +78,7 @@ export default {
   overflow: hidden;
 }
 
-input {
+.filterItem input {
     outline: none;
     border: none;
     border-bottom: 1px solid rgb(20, 165, 223);
@@ -106,6 +114,10 @@ th {
   background-color: rgb(20, 165, 223);
   color: white;
   cursor: default;
+}
+
+td input {
+  width: 100%;
 }
 
 </style>

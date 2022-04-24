@@ -46,8 +46,7 @@ const noteValidation = (data) => {
 
 const assignmentValidation = (data) => {
   const schema = Joi.object({
-    manager_id: Joi.string().required(),
-    user_id: Joi.string().required(),
+    group_id: Joi.string().required(),
     document_id: Joi.string().required(),
     date_to: Joi.date().required(),
     date_from: Joi.date(),

@@ -61,14 +61,14 @@ router.post('/login', async (req, res) => {
 
   //Create token
   const token = jwt.sign({_id: user._id}, process.env.TOKEN_SECRET);
-  res.header('Auth-Token', token).send(token);
+  res.header('Auth-Token', token).send({token: token, name: user.name});
 })
 
 router.post('/verify', async (req, res) => {
   const token = req.body.token;
   try {
     const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-    res.send(verified.role)
+    res.send(verified)
   } catch(err) {
     res.status(400).send('Invalid token');
   }

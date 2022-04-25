@@ -10,7 +10,7 @@
         {{value.label}}
       </th>
     </tr>
-    <tr v-for="row in filterData" v-on:click="onClick(row._id, $event)">
+    <tr v-for="row in filterData" v-on:click="onClick(row._id, row)">
       <td v-for="(value, name) in header" :style="styleColumn(value.width, value.align)">
         <template v-if="value.type == 'check'">
           {{(row[name] ? "Áno" : "Nie")}}

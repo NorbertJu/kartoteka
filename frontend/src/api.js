@@ -196,7 +196,7 @@ const api = {
       }
     });
   },
-  getAssignment(id) {
+  getAssignments(id) {
     return axios(url+'/assignment/'+id, {
       headers: {
         'Auth-Token': window.localStorage.getItem('Auth-Token')
@@ -210,6 +210,20 @@ const api = {
         'Auth-Token': window.localStorage.getItem('Auth-Token')
       },
       data: data
+    });
+  },
+  getUserAssignments() {
+    return axios(url+'/assignment/user', {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
+    });
+  },
+  getAssignmentProgress(id) {
+    return axios(url+'/assignment/progress/'+id, {
+      headers: {
+        'Auth-Token': window.localStorage.getItem('Auth-Token')
+      },
     });
   },
 }

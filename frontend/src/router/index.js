@@ -112,7 +112,14 @@ const router = createRouter({
             next({name: 'login'})
           }
         }
-      }
+      },
+      children: [
+        {
+          path: ':id',
+          name: 'progressId',
+          component: () => import('../views/ProgressView.vue')
+        },
+      ]
     },
     {
       path: '/profile',

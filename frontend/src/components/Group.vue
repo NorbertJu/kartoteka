@@ -15,7 +15,7 @@
       <h2>{{manager}}</h2>
       <Table :header="membersHeader" :data="members" :onClick="() => {}" />
       <br>
-      <Table :header="assignmentsHeader" :data="assignments" :onClick="() => {}" />
+      <Table :header="assignmentsHeader" :data="assignments" :onClick="onAssignmentClick" />
     </template>
     <template v-if="edit">
       <div class="inputs">
@@ -70,6 +70,7 @@ export default {
     onAssignUpdate: Function,
     onAssignCancel: Function,
     documents: Array,
+    onAssignmentClick: Function,
   },
   data() {
     return {

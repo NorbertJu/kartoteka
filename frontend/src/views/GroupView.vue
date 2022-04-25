@@ -29,6 +29,7 @@
         :onAssignUpdate="onAssignUpdate"
         :onAssignCancel="onAssignCancel"
         :documents="documents"
+        :onAssignmentClick="onAssignmentClick"
       />
     </template>
   </div>
@@ -106,9 +107,9 @@ export default {
             active: m.active,
             _id: m.member._id
           }))
-          this.isMember = this.members.filter(member => member.name == window.localStorage.getItem('user'))[0]?.active
+          this.isMember = this.members?.filter(member => member.name == window.localStorage.getItem('user'))[0]?.active
         }
-        await this.getAssignment(); 
+        await this.getAssignments(); 
       } catch (err) {
         console.log(err)
       }
@@ -169,9 +170,9 @@ export default {
         console.log(err)
       }
     },
-    async getAssignment() {
+    async getAssignments() {
       try {
-        const response = await this.$api.getAssignment(this.id);
+        const response = await this.$api.getAssignments(this.id);
         this.assignments = response.data.map(assignment => ({
           ...assignment,
           date_from: new Date(assignment.date_from).toISOString().slice(0, 10),
@@ -248,6 +249,13 @@ export default {
     openGroup(id) {
       this.$router.push({name: 'groupId', params: { id: id }})
     },
+    onAssignmentClick(id, row) {
+      if (this.canEdit) {
+        this.$router.push({name: 'progressId', params: { id: id }})
+      } else {
+        this.$router.push({name: 'documentId', params: { id: row?.document_id }})
+      }
+    },
     async onAccept() {
       try {
         const updatedMembers = this.members.map(member => {
@@ -283,13 +291,15 @@ export default {
   watch: {
     id: {
       handler: async function(id) {
-        if (id) {
+        if (id && this.$route.name == 'groupId') {
           this.getGroup();
           this.getGroupEdit();
         } else {
           this.name = ''
           this.manager = ''
           this.members = []
+          this.edit = false
+          this.assign = false
         }
       },
       immediate: true

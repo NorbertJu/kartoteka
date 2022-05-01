@@ -219,7 +219,7 @@ export default {
         this.addedUsers.push(id)
       }
     },
-    onDocumentClick(id, e) {
+    onDocumentClick(id, row, e) {
       if (e.target.tagName == "INPUT") {
         return
       }

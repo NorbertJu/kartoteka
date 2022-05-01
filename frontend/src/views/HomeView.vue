@@ -1,8 +1,8 @@
 <template>
   <div class="main home">
     <h1>Vitaj v kartotéke!</h1>
-    <h2>Priradené dokumenty</h2>
-    <Table :header="header" :data="documents" :onClick="openDocument" />
+    <h2>{{documents.length ? 'Priradené dokumenty' : 'Momentálne nemáš priradené žiadne nové dokumenty'}}</h2>
+    <Table v-if="documents.length" :header="header" :data="documents" :onClick="openDocument" />
   </div>
 </template>
 

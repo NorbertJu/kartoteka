@@ -16,7 +16,11 @@ dotenv.config();
 
 //connect to DB
 mongoose.connect(process.env.DB_CONNECT,
-() => console.log('Connected to DB'))
+() => {
+  console.log('Connected to DB')
+  //Schedule notifications
+  require('./notifications');
+})
 
 //middlewares
 app.use(cors());

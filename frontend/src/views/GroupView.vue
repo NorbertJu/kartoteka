@@ -171,18 +171,20 @@ export default {
       }
     },
     async getAssignments() {
-      try {
-        const response = await this.$api.getAssignments(this.id);
-        this.assignments = response.data.map(assignment => ({
-          ...assignment,
-          date_from: new Date(assignment.date_from).toISOString().slice(0, 10),
-          date_to: new Date(assignment.date_to).toISOString().slice(0, 10),
-          name: assignment.document_id.name,
-          author: assignment.document_id.author,
-          document_id: assignment.document_id._id,
-        }))
-      } catch (err) {
-        console.log(err)
+      if (this.id != 'new') {
+        try {
+          const response = await this.$api.getAssignments(this.id);
+          this.assignments = response.data.map(assignment => ({
+            ...assignment,
+            date_from: new Date(assignment.date_from).toISOString().slice(0, 10),
+            date_to: new Date(assignment.date_to).toISOString().slice(0, 10),
+            name: assignment.document_id.name,
+            author: assignment.document_id.author,
+            document_id: assignment.document_id._id,
+          }))
+        } catch (err) {
+          console.log(err)
+        }
       }
     },
     async onGroupUpdate(data) {
@@ -242,8 +244,9 @@ export default {
       this.assign = true;
       await this.getDocuments();
     },
-    newGroup() {
+    async newGroup() {
       this.edit = true;
+      await this.getUsers();
       this.$router.push({name: 'groupId', params: { id: 'new' }})
     },
     openGroup(id) {

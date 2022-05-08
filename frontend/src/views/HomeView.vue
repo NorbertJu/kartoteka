@@ -47,7 +47,6 @@ export default {
     async getUserAssignments() {
       try {
         const response = await this.$api.getUserAssignments();
-        console.log(response.data)
         const data = response.data.map(res => ({
           ...res,
           date_to: new Date(res.date_to).toISOString().slice(0, 10)

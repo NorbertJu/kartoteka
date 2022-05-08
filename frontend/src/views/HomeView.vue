@@ -25,16 +25,20 @@ export default {
           noFilter: true,
         },
         name: {
-          label: "Názov",
-          width: 30,
+          label: "Dokument",
+          width: 25,
         },
         author: {
           label: "Autor",
-          width: 30,
+          width: 25,
+        },
+        group: {
+          label: "Skupina",
+          width: 20,
         },
         date_to: {
           label: "Dátum do",
-          width: 30,
+          width: 20,
         }
       }
     }
@@ -43,6 +47,7 @@ export default {
     async getUserAssignments() {
       try {
         const response = await this.$api.getUserAssignments();
+        console.log(response.data)
         const data = response.data.map(res => ({
           ...res,
           date_to: new Date(res.date_to).toISOString().slice(0, 10)

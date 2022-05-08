@@ -9,7 +9,7 @@ const {assignmentValidation} = require('../validation')
 router.get('/user', verify, async (req, res) => {
   try {
     let userAssignments = []
-    let activeGroups = await Group.find({'members.member': req.user._id, 'members.active': true}, '_id'); 
+    let activeGroups = await Group.find({'members.member': req.user._id, 'members.active': true}, '_id name'); 
     for (const group of activeGroups) {
       const assignments = await Assignment.find({group_id: group._id.toString()}).populate('document_id')
       for (let assignment of assignments) {
@@ -18,6 +18,7 @@ router.get('/user', verify, async (req, res) => {
           continue
         }
         userAssignments.push({
+          group: group.name,
           progress: progress?.state ? progress.state : 0,
           _id: assignment.document_id._id,
           name: assignment.document_id.name,
